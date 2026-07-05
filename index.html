@@ -205,10 +205,7 @@
     <script>
         // Tema: cek preferensi sistem sebagai default awal (tanpa localStorage)
         const htmlEl = document.documentElement;
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDark) {
-            htmlEl.classList.add('dark');
-        }
+       
 
         // Memuat ikon Lucide otomatis
         lucide.createIcons();
