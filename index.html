@@ -7,7 +7,6 @@
     <meta name="theme-color" content="#6d28d9">
     <title>Link Internal SD</title>
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -15,10 +14,8 @@
         }
     </script>
     
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- Font Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -35,7 +32,6 @@
         .menu-card:active { 
             transform: scale(0.95); 
         }
-        /* Getar jika password salah */
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-6px); }
@@ -44,11 +40,6 @@
         .shake {
             animation: shake 0.3s ease-in-out;
         }
-        /* Warna ikon lebih lembut pada dark mode */
-        .dark .menu-card i[data-lucide] {
-            color: #82243b !important;
-        }
-        /* Toggle switch */
         .theme-toggle-track {
             transition: background-color 0.3s ease;
         }
@@ -70,7 +61,6 @@
                 </div>
             </div>
 
-            <!-- Dark / Light Mode Toggle Button (kanan atas) -->
             <button id="theme-toggle" aria-label="Ganti tema" class="theme-toggle-track relative flex items-center w-16 h-9 rounded-full bg-slate-200 dark:bg-slate-700 px-1 shadow-inner">
                 <span class="theme-toggle-thumb absolute left-1 top-1 w-7 h-7 rounded-full bg-white dark:bg-black shadow-md flex items-center justify-center dark:translate-x-7">
                     <i data-lucide="sun" id="icon-sun" class="w-4 h-4 text-orange-400 dark:hidden"></i>
@@ -82,101 +72,107 @@
 
     <main class="max-w-6xl mx-auto px-6 py-8">
         
-        <!-- Quintal Access Button (Diletakkan di sebelah kanan) -->
-        <div class="mb-8 flex justify-end">
-            <a href="https://tuglo.quintal.id" target="_blank" class="flex items-center justify-center gap-2 bg-[#0d69b3] hover:bg-[#0b5898] border border-[#0d69b3] text-white px-8 py-3 rounded-2xl font-bold tracking-wide transition-all duration-200 hover:scale-[1.03] shadow-md hover:shadow-lg w-full sm:w-auto text-center">
-                <span>Quintal</span>
-                <i data-lucide="external-link" class="w-4 h-4"></i>
-            </a>
+        <div class="mb-10 flex flex-col md:flex-row items-center justify-between gap-8">
+            <!-- Left: Text content -->
+            <div class="w-full md:w-1/3 text-center md:text-left">
+                <h2 class="text-2xl font-bold mb-4 text-slate-800 dark:text-slate-100">Hai, Guru Hebat!</h2>
+                <p id="daily-quote" class="text-slate-600 dark:text-slate-400 mb-6 italic">Memuat kutipan hari ini...</p>
+                <a href="https://tuglo.quintal.id" target="_blank" class="inline-flex items-center justify-center gap-2 bg-[#0d69b3] hover:bg-[#0b5898] border border-[#0d69b3] text-white px-8 py-3 rounded-2xl font-bold tracking-wide transition-all duration-200 hover:scale-[1.03] shadow-md hover:shadow-lg w-full sm:w-auto">
+                    <span>Quintal</span>
+                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                </a>
+            </div>
+            
+            <!-- Right: Image (resized, no shadow, no border) -->
+            <div class="w-full md:w-1/2 flex justify-center md:justify-end">
+                <img src="https://i.imgur.com/Hd5lzbq.png" alt="Ilustrasi Sekolah Tunas Global" class="w-full max-w-[300px] h-auto rounded-xl">
+            </div>
         </div>
 
         <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
             
             <a href="https://drive.google.com/drive/folders/1C4hCnN3KetUEswbyc9EAKtXsAEwN2IuQ?usp=sharing" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="folder-open" class="w-12 h-12 mb-1" style="color: #f89fb1;"></i>
+                <i data-lucide="folder-open" class="w-12 h-12 mb-1 text-blue-500"></i>
                 <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Administrasi</span>
             </a>
 
             <a href="https://drive.google.com/drive/folders/17l7DYp1LtqbdtKH1H69i4_Vwhvs6AnoL?usp=drive_link" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="camera" class="w-12 h-12 mb-1" style="color: #f89fb1;"></i>
+                <i data-lucide="camera" class="w-12 h-12 mb-1 text-emerald-500"></i>
                 <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Foto Kegiatan</span>
             </a>
 
             <a href="https://tesssdddd.my.canva.site/comingsoon" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="shapes" class="w-12 h-12 mb-1" style="color: #f89fb1;"></i>
+                <i data-lucide="shapes" class="w-12 h-12 mb-1 text-violet-500"></i>
                 <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Alat Peraga</span>
             </a>
-
             
             <a href="https://laporanpiket.taplink.site" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="person-standing" class="w-12 h-12 mb-1" style="color: #f89fb1;"></i>
+                <i data-lucide="person-standing" class="w-12 h-12 mb-1 text-orange-500"></i>
                 <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Piket Guru</span>
             </a>
             
             <a href="https://laporansarpras.vercel.app/" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="hard-hat" class="w-12 h-12 mb-1" style="color: #fed136;"></i>
+                <i data-lucide="hard-hat" class="w-12 h-12 mb-1 text-amber-500"></i>
                 <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Laporan Sarpras</span>
             </a>
 
             <a href="https://linktr.ee/TugloCinema" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="film" class="w-12 h-12 mb-1" style="color: #f89fb1;"></i>
+                <i data-lucide="film" class="w-12 h-12 mb-1 text-red-500"></i>
                 <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Booking Cinema</span>
             </a>
 
             <a href="https://tuglolibrary.taplink.site/" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="users" class="w-12 h-12 mb-1" style="color: #f89fb1;"></i>
+                <i data-lucide="users" class="w-12 h-12 mb-1 text-indigo-500"></i>
                 <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Kunjungan Perpus</span>
             </a>
 
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSdAe3bGL0RQNQgwIc51zhQCtUA4jEkGd45VwSEGQTN8pk53Dw/viewform" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="volume-2" class="w-12 h-12 mb-1" style="color: #f89fb1;"></i>
+                <i data-lucide="volume-2" class="w-12 h-12 mb-1 text-pink-500"></i>
                 <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Peminjaman Sound</span>
             </a>
 
             <a href="https://drive.google.com/file/d/1mNNyyUx5VbhNaTRMxq9oGzqS254yHPbt/view" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="package" class="w-12 h-12 mb-1" style="color: #f89fb1;"></i>
+                <i data-lucide="package" class="w-12 h-12 mb-1 text-amber-600"></i>
                 <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Isi Gudang</span>
             </a>
 
-            <!-- Protected Menus -->
             <a href="#" data-href="https://www.appsheet.com/start/7e9abd6b-ce3b-4d54-93d3-458288bf9665" id="menu-habis-pakai" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square cursor-pointer transition-transform duration-200 hover:scale-105">
-                <i data-lucide="archive" class="w-12 h-12 mb-1" style="color: #f89fb1;"></i>
+                <i data-lucide="archive" class="w-12 h-12 mb-1 text-orange-600"></i>
                 <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Data Barang Habis Pakai</span>
             </a>
 
             <a href="#" data-href="https://tesssdddd.my.canva.site/comingsoon" id="menu-bos" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square cursor-pointer transition-transform duration-200 hover:scale-105">
-                <i data-lucide="database" class="w-12 h-12 mb-1" style="color: #f89fb1;"></i>
+                <i data-lucide="database" class="w-12 h-12 mb-1 text-yellow-500"></i>
                 <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Data Barang BOS</span>
             </a>
 
             <a href="https://tesssdddd.my.canva.site/comingsoon" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="pie-chart" class="w-12 h-12 mb-1" style="color: #f89fb1;"></i>
+                <i data-lucide="pie-chart" class="w-12 h-12 mb-1 text-amber-500"></i>
                 <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Data IPK</span>
             </a>
 
             <a href="https://tesssdddd.my.canva.site/comingsoon" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="book-open" class="w-12 h-12 mb-1" style="color: #f89fb1;"></i>
+                <i data-lucide="book-open" class="w-12 h-12 mb-1 text-violet-600"></i>
                 <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Katalog Perpus</span>
             </a>
 
             <a href="https://linkinternal2025-2026.taplink.id/" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="link" class="w-12 h-12 mb-1" style="color: #f89fb1;"></i>
+                <i data-lucide="link" class="w-12 h-12 mb-1 text-indigo-400"></i>
                 <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Link Tahun Lalu</span>
             </a>
 
             <a href="https://taplink.cc/webpembelajaran" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="monitor-play" class="w-12 h-12 mb-1" style="color: #f89fb1;"></i>
+                <i data-lucide="monitor-play" class="w-12 h-12 mb-1 text-blue-400"></i>
                 <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">App Pembelajaran</span>
             </a>
 
             <a href="https://tesssdddd.my.canva.site/comingsoon" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="calendar" class="w-12 h-12 mb-1" style="color: #f89fb1;"></i>
+                <i data-lucide="calendar" class="w-12 h-12 mb-1 text-purple-500"></i>
                 <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Kalender Pendidikan</span>
             </a>
         </div>
 
-        <!-- Muted Warning Banner (Dipindahkan ke bagian bawah halaman) -->
-        <div class="mt-12 p-3 bg-slate-100/50 dark:bg-black/70 border border-slate-200/80 dark:border-slate-800 rounded-xl flex items-center gap-3 shadow-sm max-w-xl mx-auto md:mx-0">
+        <div class="mt-12 p-3 bg-slate-100/50 dark:bg-black/70 border border-slate-200/80 dark:border-slate-800 rounded-xl flex flex-col items-center justify-center text-center gap-1 shadow-sm w-full">
             <i data-lucide="alert-triangle" class="text-slate-500 dark:text-slate-400 w-5 h-5 flex-shrink-0"></i>
             <div>
                 <h1 class="font-bold text-slate-700 dark:text-slate-300 text-[12px]">Dilarang Menyebarkan Link/App Ini!</h1>
@@ -186,18 +182,16 @@
 
     </main>
 
-    <!-- Custom Modal with Inline Error Feedback and Soft Animation styling -->
     <div id="password-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
         <div id="modal-box" class="bg-white dark:bg-black rounded-2xl p-6 w-full max-w-sm shadow-xl border border-orange-100 dark:border-slate-800">
             <h3 class="font-bold text-lg mb-2 text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                <i data-lucide="lock" class="w-5 h-5" style="color: #f89fb1;"></i>
+                <i data-lucide="lock" class="w-5 h-5 text-rose-300"></i>
                 Password Diperlukan
             </h3>
             <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Silakan masukkan kode internal SDNP Tunas Global.</p>
             
             <input type="password" id="pass" class="w-full p-3 border border-slate-200 dark:border-slate-600 rounded-xl mb-2 focus:ring-2 focus:ring-orange-200 dark:focus:ring-orange-500 focus:border-orange-400 outline-none transition-all text-slate-800 dark:text-slate-100 bg-white dark:bg-black" placeholder="Masukkan password...">
             
-            <!-- Inline Error Message -->
             <p id="error-msg" class="text-red-500 dark:text-red-400 text-xs font-semibold mb-4 hidden flex items-center gap-1">
                 <i data-lucide="x-circle" class="w-4 h-4"></i> Password salah! Silakan coba lagi.
             </p>
@@ -210,11 +204,7 @@
     </div>
 
     <script>
-        // Tema: cek preferensi sistem sebagai default awal (tanpa localStorage)
         const htmlEl = document.documentElement;
-       
-
-        // Memuat ikon Lucide otomatis
         lucide.createIcons();
 
         const themeToggle = document.getElementById('theme-toggle');
@@ -228,7 +218,6 @@
         const errorMsg = document.getElementById('error-msg');
         let pending = '';
 
-        // Tangkap trigger klik semua elemen berproteksi data-href
         document.querySelectorAll('[data-href]').forEach(el => {
             el.onclick = (e) => {
                 e.preventDefault();
@@ -238,7 +227,6 @@
             }
         });
 
-        // Menutup modal serta reset state
         const closeModal = () => {
             modal.classList.add('hidden');
             passInput.value = '';
@@ -248,16 +236,14 @@
 
         document.getElementById('back-pass').onclick = closeModal;
 
-        // Fungsi autentikasi tanpa menggunakan alert browser
         const verifyPassword = () => {
             if(passInput.value === 'tuglo') {
                 window.open(pending, '_blank');
                 closeModal();
             } else {
-                // Tampilkan error inline dengan animasi goyang (shake)
                 errorMsg.classList.remove('hidden');
                 modalBox.classList.remove('shake');
-                void modalBox.offsetWidth; // Memicu reflow browser untuk me-reset animasi
+                void modalBox.offsetWidth;
                 modalBox.classList.add('shake');
                 passInput.focus();
             }
@@ -275,11 +261,57 @@
             errorMsg.classList.add('hidden');
             modalBox.classList.remove('shake');
         });
+
+        // Kutipan harian tentang pendidikan & guru (berganti otomatis tiap hari)
+        const dailyQuotes = [
+            "Guru yang biasa-biasa saja memberi tahu. Guru yang baik menjelaskan. Guru yang hebat menginspirasi. — William Arthur Ward",
+            "Mendidik anak-anak agar menjadi cerdas saja tidak cukup, pendidikan harus membuat mereka baik juga. — Theodore Roosevelt",
+            "Pendidikan bukanlah persiapan untuk hidup, pendidikan adalah hidup itu sendiri. — John Dewey",
+            "Anak bukanlah kertas kosong yang bisa ditulisi sekehendak hati kita. — Ki Hajar Dewantara",
+            "Guru adalah orang yang menanam benih hari ini yang akan berbuah di masa depan.",
+            "Tut wuri handayani, di belakang memberi dorongan. — Ki Hajar Dewantara",
+            "Seorang guru akan terus belajar sepanjang hidupnya agar layak menjadi pengajar.",
+            "Ilmu itu lebih baik daripada harta. Ilmu menjaga engkau, sedangkan harta harus engkau jaga. — Ali bin Abi Thalib",
+            "Mengajar dengan hati akan sampai ke hati murid.",
+            "Pendidikan adalah senjata paling ampuh untuk mengubah dunia. — Nelson Mandela",
+            "Guru yang hebat membuat siswa percaya bukan pada gurunya, tetapi pada dirinya sendiri.",
+            "Setiap anak adalah bintang, tugas guru adalah membantu mereka bersinar.",
+            "Kesabaran seorang guru adalah investasi untuk masa depan bangsa.",
+            "Belajar tanpa berpikir itu tidak berguna, tapi berpikir tanpa belajar itu berbahaya. — Konfusius",
+            "Guru adalah pahlawan tanpa tanda jasa yang menuntun anak bangsa menuju cahaya ilmu.",
+            "Sedikit ilmu yang diamalkan lebih baik daripada banyak ilmu yang hanya dihafalkan.",
+            "Anak-anak butuh contoh, bukan kritik. Jadilah guru yang mereka teladani.",
+            "Semangat guru hari ini adalah cahaya harapan murid untuk hari esok.",
+            "Mendidik hati sama pentingnya dengan mendidik pikiran.",
+            "Kelas terbaik adalah tempat di mana rasa ingin tahu lebih dihargai daripada nilai sempurna.",
+            "Guru yang penuh cinta akan menciptakan murid yang penuh percaya diri.",
+            "Ilmu yang bermanfaat adalah warisan terbaik seorang guru bagi muridnya.",
+            "Jadilah guru yang membuat murid rindu untuk terus belajar.",
+            "Setiap hari adalah kesempatan baru untuk menginspirasi satu jiwa lagi.",
+            "Guru hebat bukan yang tahu segalanya, tapi yang mau terus belajar bersama muridnya.",
+            "Kata-kata mengajar, tapi teladan menarik. — Anonim",
+            "Pendidikan yang baik dimulai dari guru yang bahagia menjalani panggilannya.",
+            "Anak yang diberi kasih sayang dalam belajar akan tumbuh menjadi pribadi yang percaya diri.",
+            "Tugas guru bukan mengisi ember, tapi menyalakan api semangat belajar.",
+            "Hari ini kau menabur ilmu, esok engkau menuai generasi yang berilmu dan berakhlak."
+        ];
+
+        function tampilkanKutipanHarian() {
+            const el = document.getElementById('daily-quote');
+            if (!el) return;
+            const today = new Date();
+            // Hitung urutan hari sejak awal tahun agar kutipan berganti otomatis setiap hari
+            const startOfYear = new Date(today.getFullYear(), 0, 0);
+            const diff = today - startOfYear;
+            const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const index = dayOfYear % dailyQuotes.length;
+            el.textContent = dailyQuotes[index];
+        }
+        tampilkanKutipanHarian();
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js');
+        }
     </script>
-    <script>
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js');
-}
-</script>
 </body>
 </html>
