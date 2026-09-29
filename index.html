@@ -1,363 +1,632 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="h-full bg-[#FAFAFA]">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#6d28d9">
-    <title>Link Internal SD</title>
-    
-   <link rel="stylesheet" href="output.css">
-    
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://alankoesumah.github.io">
-<link rel="preconnect" href="https://laporansarpras.vercel.app">
-<link rel="preconnect" href="https://docs.google.com">
-<link rel="preconnect" href="https://drive.google.com">
-<link rel="preconnect" href="https://script.google.com">
-<link rel="preconnect" href="https://i.imgur.com">
-    <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            -webkit-tap-highlight-color: transparent; 
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        .menu-card { 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-        }
-        .menu-card:active { 
-            transform: scale(0.95); 
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-6px); }
-            75% { transform: translateX(6px); }
-        }
-        .shake {
-            animation: shake 0.3s ease-in-out;
-        }
-        .theme-toggle-track {
-            transition: background-color 0.3s ease;
-        }
-        .theme-toggle-thumb {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PresTunas - Data Prestasi Siswa</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','sans-serif']}}}}</script>
 </head>
-<body class="bg-slate-50 dark:bg-black min-h-screen text-slate-800 dark:text-slate-100">
+<body class="h-full text-gray-900 font-sans antialiased">
+<div class="min-h-full flex flex-col md:flex-row">
 
-    <header class="sticky top-0 z-10 bg-white/80 dark:bg-black/90 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 shadow-sm">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <img src="https://i.imgur.com/owOtwJ8.png" alt="Logo SDNP Tunas Global" class="h-10 w-auto object-contain">
-                <div>
-                    <h1 class="text-xl font-bold text-purple-900 dark:text-purple-200 tracking-tight">LINK INTERNAL</h1>
-                    <p class="text-sm text-purple-700 dark:text-purple-300 font-medium">SDNP Tunas Global</p>
-                    <p class="text-sm text-purple-700 dark:text-purple-300 font-medium">ver 2.0</p>
-                </div>
-            </div>
+<!-- SIDEBAR -->
+<aside class="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 z-30 bg-white border-r border-gray-200">
+  <div class="flex flex-col flex-grow pt-5 overflow-y-auto">
+    <div class="flex items-center gap-3 px-6 pb-6 border-b border-gray-100">
+      <div class="w-10 h-10 bg-violet-600 flex-shrink-0" style="-webkit-mask:url('https://i.imgur.com/5T1LlRI.png') no-repeat center/contain;mask:url('https://i.imgur.com/5T1LlRI.png') no-repeat center/contain"></div>
+      <div><h1 class="font-bold text-base leading-tight">PresTunas</h1><p class="text-xs text-gray-500 font-medium">Data Prestasi Siswa</p></div>
+    </div>
+    <div id="syncBox" class="mx-4 my-4 p-3 bg-gray-50 border border-gray-200 rounded-xl flex items-center gap-2.5">
+      <span id="syncDot" class="h-2.5 w-2.5 rounded-full bg-gray-400"></span>
+      <div class="min-w-0"><p id="syncTitle" class="text-xs font-semibold truncate">Belum Terhubung</p><p id="syncSub" class="text-[11px] text-gray-500 truncate">Isi Pengaturan</p></div>
+    </div>
+    <nav class="flex-1 px-4 space-y-1.5">
+      <button data-nav="dashboard" onclick="switchTab('dashboard')" class="navbtn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm"><i data-lucide="layout-dashboard" class="w-5 h-5"></i>Dashboard</button>
+      <button data-nav="data" onclick="switchTab('data')" class="navbtn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm"><i data-lucide="award" class="w-5 h-5"></i>Data Prestasi</button>
+      <button onclick="openModalTambah()" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-violet-50"><i data-lucide="plus-circle" class="w-5 h-5"></i>Tambah Data</button>
+      <button onclick="bukaSheet()" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-violet-50"><i data-lucide="external-link" class="w-5 h-5"></i>Buka Google Sheet</button>
+      <button data-nav="settings" onclick="switchTab('settings')" class="navbtn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm"><i data-lucide="settings" class="w-5 h-5"></i>Pengaturan</button>
+    </nav>
+    <div class="p-4 border-t border-gray-100">
+      <div class="flex items-center gap-3 p-2 rounded-xl bg-violet-50/50">
+        <div class="w-9 h-9 rounded-full bg-violet-600 text-white flex items-center justify-center font-bold text-xs">LK</div>
+        <div class="min-w-0"><p class="text-xs font-semibold truncate">Lukas Koesumah</p><p class="text-[11px] text-gray-500 truncate">Guru / Admin Sekolah</p></div>
+      </div>
+    </div>
+  </div>
+</aside>
 
-            <button id="theme-toggle" aria-label="Ganti tema" class="theme-toggle-track relative flex items-center w-16 h-9 rounded-full bg-slate-200 dark:bg-slate-700 px-1 shadow-inner">
-                <span class="theme-toggle-thumb absolute left-1 top-1 w-7 h-7 rounded-full bg-white dark:bg-black shadow-md flex items-center justify-center dark:translate-x-7">
-                    <i data-lucide="sun" id="icon-sun" class="w-4 h-4 text-orange-400 dark:hidden"></i>
-                    <i data-lucide="moon" id="icon-moon" class="w-4 h-4 text-purple-300 hidden dark:block"></i>
-                </span>
-            </button>
-        </div>
-    </header>
+<div class="flex-1 md:pl-64 flex flex-col min-h-screen">
+  <header class="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-gray-200 px-4 sm:px-8 py-3.5 flex items-center justify-between">
+    <div class="flex items-center gap-3 md:hidden"><span class="font-bold text-base">PresTunas</span></div>
+    <div class="hidden md:block"><h2 id="pageTitle" class="text-lg font-bold">Dashboard</h2><p id="pageSub" class="text-xs text-gray-500"></p></div>
+    <div class="flex items-center gap-2 sm:gap-3">
+      <div class="relative hidden sm:block">
+        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+        <input id="globalSearch" onkeyup="if(event.key==='Enter'){switchTab('data');$('filterSearch').value=this.value;renderTable()}" placeholder="Cari lalu Enter..." class="pl-9 pr-4 py-2 bg-gray-100 rounded-xl text-xs w-56 focus:outline-none focus:ring-2 focus:ring-violet-500/20">
+      </div>
+      <button onclick="bukaSheet()" title="Buka Google Sheet data prestasi" class="px-3 py-2 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-semibold text-xs flex items-center gap-1.5"><i data-lucide="external-link" class="w-4 h-4"></i><span class="hidden sm:inline">Buka Sheet</span></button>
+      <button onclick="loadPrestasi(true)" title="Muat ulang dari sheet" class="p-2 rounded-xl bg-gray-100 hover:bg-gray-200"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
+      <button onclick="openModalTambah()" class="px-3.5 py-2 bg-lime-500 hover:bg-lime-600 font-bold text-xs sm:text-sm rounded-xl flex items-center gap-1.5"><i data-lucide="plus" class="w-4 h-4"></i>Tambah Prestasi</button>
+    </div>
+  </header>
 
-    <main class="max-w-6xl mx-auto px-6 py-8">
-        
-        <div class="mb-10 flex flex-col md:flex-row items-center justify-between gap-8">
-            <!-- Left: Text content -->
-            <div class="w-full md:w-1/3 text-center md:text-left">
-                <h2 class="text-2xl font-bold mb-4 text-slate-800 dark:text-slate-100">Hai, Guru Hebat!</h2>
-                <p id="daily-quote" class="text-slate-600 dark:text-slate-400 mb-6 italic">Memuat kutipan hari ini...</p>
-                <a href="https://tuglo.quintal.id" target="_blank" class="inline-flex items-center justify-center gap-2 bg-[#0d69b3] hover:bg-[#0b5898] border border-[#0d69b3] text-white px-8 py-3 rounded-2xl font-bold tracking-wide transition-all duration-200 hover:scale-[1.03] shadow-md hover:shadow-lg w-full sm:w-auto">
-                    <span>Quintal</span>
-                    <i data-lucide="external-link" class="w-4 h-4"></i>
-                </a>
-            </div>
-            
-            <!-- Right: Image (resized, no shadow, no border) -->
-            <div class="w-full md:w-1/2 flex justify-center md:justify-end">
-              <img src="https://res.cloudinary.com/zuu5nwf1/image/upload/w_300,f_auto,q_auto/v1785593701/ulbww2e6fwmvbswo2jq6.png" alt="Ilustrasi Sekolah Tunas Global" width="300" height="169" class="w-full max-w-[300px] h-auto rounded-xl" loading="eager" fetchpriority="high">
-            </div>
-        </div>
-
-        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
-            
-            <a href="https://drive.google.com/drive/folders/1C4hCnN3KetUEswbyc9EAKtXsAEwN2IuQ?usp=sharing" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="folder-open" class="w-12 h-12 mb-1 text-blue-500"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Administrasi</span>
-            </a>
-
-            <a href="https://drive.google.com/drive/folders/17l7DYp1LtqbdtKH1H69i4_Vwhvs6AnoL?usp=drive_link" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="camera" class="w-12 h-12 mb-1 text-emerald-500"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Foto Kegiatan</span>
-            </a>
-
-            <a href="https://docs.google.com/spreadsheets/d/1_uUWbfN-au1AXQAnof02hdiLdlXtboPf/edit?usp=drivesdk&ouid=112508512639491852927&rtpof=true&sd=true" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="tally-5" class="w-12 h-12 mb-1 text-violet-500"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Rekap Nilai</span>
-            </a>
-            
-            <a href="https://alankoesumah.github.io/Sistem-Piket/" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="person-standing" class="w-12 h-12 mb-1 text-orange-500"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Piket Guru</span>
-            </a>
-            
-            <a href="https://laporansarpras.vercel.app/" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="hard-hat" class="w-12 h-12 mb-1 text-amber-500"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Laporan Sarpras</span>
-            </a>
-
-            <a href="https://alankoesumah.github.io/Daftar_Bacaan_Siswa/#" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="book-open" class="w-12 h-12 mb-1 text-violet-600"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Daftar Membaca Buku</span>
-            </a>
-
-             <a href="https://alankoesumah.github.io/digipena/" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="pen-tool" class="w-12 h-12 mb-1 text-pink-500"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Digipena</span>
-            </a>
-
-            <a href="https://jurnalperistiwa.netlify.app/" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="notebook-pen" class="w-12 h-12 mb-1 text-emerald-500"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Jurnal Peristiwa</span>
-            </a>
-
-            <a href="https://alankoesumah.github.io/katalogmediaajar/" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="cone" class="w-12 h-12 mb-1 text-yellow-500"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Katalog Media Ajar</span>
-            </a>
-            
-             <a href="https://alankoesumah.github.io/EduGram/" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="graduation-cap" class="w-12 h-12 mb-1 text-violet-600"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">EduGram</span>
-            </a>
-
-            <a href=" https://drive.google.com/drive/folders/1p0R1Qnwnyj_qvCOMN7t7TTA5bTXrzLme?usp=sharing" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="star" class="w-12 h-12 mb-1 text-yellow-600"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Keagamaan</span>
-            </a>
-            
-               <a href="https://drive.google.com/drive/folders/1fryaX0VaqxJ5FgUkr8jWCTldxEBzKK24?usp=drive_link" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="notebook-text" class="w-12 h-12 mb-1 text-pink-600"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Proposal & Laporan</span>
-            </a>
-
-             <a href="https://docs.google.com/spreadsheets/d/17lzijtn_AxIdcAquQz-7FYOhJVAx_BOg/edit?usp=drive_link&ouid=113215163482902713136&rtpof=true&sd=true" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="plane" class="w-12 h-12 mb-1 text-emerald-700"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Tabungan Gathering</span>
-            </a>
-
-           
-            <a href="https://linktr.ee/TugloCinema" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="film" class="w-12 h-12 mb-1 text-red-500"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Booking Cinema</span>
-            </a>
-
-            <a href="https://tuglolibrary.taplink.site/" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="users" class="w-12 h-12 mb-1 text-indigo-500"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Kunjungan Perpus</span>
-            </a>
-
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdAe3bGL0RQNQgwIc51zhQCtUA4jEkGd45VwSEGQTN8pk53Dw/viewform" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="volume-2" class="w-12 h-12 mb-1 text-pink-500"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Peminjaman Sound</span>
-            </a>
-
-            <a href="https://alankoesumah.github.io/prestasi_siswa/" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="trophy" class="w-12 h-12 mb-1 text-emerald-500"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Prestasi Siswa</span>
-            </a>
-            
-            <a href="https://alankoesumah.github.io/prestasi_siswa/" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="package" class="w-12 h-12 mb-1 text-amber-600"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Isi Gudang</span>
-            </a>
-
-             <a href="https://alankoesumah.github.io/struktural/" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="chess-pawn" class="w-12 h-12 mb-1 text-red-500"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Struktural</span>
-            </a>
-            
-            <a href="#" data-href="https://www.appsheet.com/start/7e9abd6b-ce3b-4d54-93d3-458288bf9665" id="menu-habis-pakai" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square cursor-pointer transition-transform duration-200 hover:scale-105">
-                <i data-lucide="archive" class="w-12 h-12 mb-1 text-orange-600"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Data Barang Habis Pakai</span>
-            </a>
-
-            <a href="#" data-href="https://tesssdddd.my.canva.site/comingsoon" id="menu-bos" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square cursor-pointer transition-transform duration-200 hover:scale-105">
-                <i data-lucide="database" class="w-12 h-12 mb-1 text-yellow-500"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Data Barang BOS</span>
-            </a>
-
-            <a href="https://tesssdddd.my.canva.site/comingsoon" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="pie-chart" class="w-12 h-12 mb-1 text-amber-500"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Data IPK</span>
-            </a>
-            
-            <a href="https://linkinternal2025-2026.taplink.id/" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="link" class="w-12 h-12 mb-1 text-indigo-400"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Link Tahun Lalu</span>
-            </a>
-
-            <a href="https://taplink.cc/webpembelajaran" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="monitor-play" class="w-12 h-12 mb-1 text-blue-400"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">App Pembelajaran</span>
-            </a>
-
-            <a href="https://tesssdddd.my.canva.site/comingsoon" target="_blank" class="menu-card bg-orange-50/20 dark:bg-black border border-orange-100/40 dark:border-slate-800 rounded-2xl p-2 shadow-[0_4px_12px_rgba(249,115,22,0.03)] hover:border-orange-200/60 dark:hover:border-slate-700 hover:shadow-[0_12px_24px_rgba(249,115,22,0.08)] flex flex-col items-center justify-center text-center aspect-square transition-transform duration-200 hover:scale-105">
-                <i data-lucide="calendar" class="w-12 h-12 mb-1 text-purple-500"></i>
-                <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">Kalender Pendidikan</span>
-            </a>
-        </div>
-
-        <div class="mt-12 p-3 bg-slate-100/50 dark:bg-black/70 border border-slate-200/80 dark:border-slate-800 rounded-xl flex flex-col items-center justify-center text-center gap-1 shadow-sm w-full">
-            <i data-lucide="alert-triangle" class="text-slate-500 dark:text-slate-400 w-5 h-5 flex-shrink-0"></i>
-            <div>
-                <h1 class="font-bold text-slate-700 dark:text-slate-300 text-[12px]">Dilarang Menyebarkan Link/App Ini!</h1>
-                <p class="text-[12px] text-slate-500 dark:text-slate-400">Khusus internal guru SDNP Tunas Global</p>
-            </div>
-        </div>
-
-    </main>
-
-    <div id="password-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-        <div id="modal-box" class="bg-white dark:bg-black rounded-2xl p-6 w-full max-w-sm shadow-xl border border-orange-100 dark:border-slate-800">
-            <h3 class="font-bold text-lg mb-2 text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                <i data-lucide="lock" class="w-5 h-5 text-rose-300"></i>
-                Password Diperlukan
-            </h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Silakan masukkan kode internal SDNP Tunas Global.</p>
-            
-            <input type="password" id="pass" class="w-full p-3 border border-slate-200 dark:border-slate-600 rounded-xl mb-2 focus:ring-2 focus:ring-orange-200 dark:focus:ring-orange-500 focus:border-orange-400 outline-none transition-all text-slate-800 dark:text-slate-100 bg-white dark:bg-black" placeholder="Masukkan password...">
-            
-            <p id="error-msg" class="text-red-500 dark:text-red-400 text-xs font-semibold mb-4 hidden flex items-center gap-1">
-                <i data-lucide="x-circle" class="w-4 h-4"></i> Password salah! Silakan coba lagi.
-            </p>
-            
-            <div class="flex gap-2">
-                <button id="back-pass" class="w-1/3 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 p-3 rounded-xl font-bold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">Back</button>
-                <button id="submit-pass" class="w-2/3 bg-orange-500 text-white p-3 rounded-xl font-bold hover:bg-orange-600 transition-colors shadow-md shadow-orange-100 dark:shadow-none">Buka</button>
-            </div>
-        </div>
+  <main class="flex-1 p-4 sm:p-6 lg:p-8 space-y-6 pb-24 md:pb-8">
+    <!-- DASHBOARD -->
+    <div id="view-dashboard" class="space-y-6">
+      <div class="bg-gradient-to-r from-violet-900 via-violet-800 to-slate-900 rounded-2xl p-6 text-white">
+        <span class="px-2.5 py-1 bg-white/10 text-violet-200 text-xs font-semibold rounded-full inline-block mb-3">Tahun Ajaran 2026/2027</span>
+        <h2 class="text-xl sm:text-2xl font-bold mb-2">Portal Data Prestasi Siswa</h2>
+        <p class="text-violet-200 text-xs sm:text-sm mb-4">Data tersimpan di Google Sheets dan terhubung ke Database Siswa via NIS.</p>
+        <button onclick="openModalTambah()" class="px-4 py-2.5 bg-lime-500 hover:bg-lime-600 text-gray-900 font-bold text-sm rounded-xl">Input Prestasi Baru</button>
+      </div>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-2xl border border-gray-200 p-5"><p class="text-xs font-semibold text-gray-500">Total Prestasi</p><p id="mTotal" class="text-3xl font-bold mt-1">0</p></div>
+        <div class="bg-white rounded-2xl border border-gray-200 p-5"><p class="text-xs font-semibold text-gray-500">Siswa Berprestasi</p><p id="mSiswa" class="text-3xl font-bold mt-1">0</p></div>
+        <div class="bg-white rounded-2xl border border-gray-200 p-5"><p class="text-xs font-semibold text-gray-500">Ajang / Kejuaraan</p><p id="mLomba" class="text-3xl font-bold mt-1">0</p></div>
+        <div class="bg-white rounded-2xl border border-gray-200 p-5"><p class="text-xs font-semibold text-gray-500">Capaian Bulan Ini</p><p id="mBulan" class="text-3xl font-bold mt-1">0</p></div>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-200 p-5">
+        <div class="mb-5"><p class="text-xs font-bold text-gray-500 mb-2">Prestasi per Tahun Pelajaran (klik untuk melihat)</p><div id="tahunChips" class="flex flex-wrap gap-2"></div></div>
+        <div class="flex items-center justify-between mb-4"><h3 class="font-bold text-sm sm:text-base">Prestasi Terbaru</h3><button onclick="switchTab('data')" class="text-xs font-bold text-violet-700">Lihat Semua</button></div>
+        <div id="recentList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
+      </div>
     </div>
 
-    <script>
-        const htmlEl = document.documentElement;
-        lucide.createIcons();
+    <!-- DATA -->
+    <div id="view-data" class="hidden space-y-4">
+      <div class="bg-white rounded-2xl border border-gray-200 p-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="relative flex-1 sm:max-w-sm">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+          <input id="filterSearch" oninput="renderTable()" placeholder="Cari NIS, nama, lomba, kategori..." class="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-violet-500">
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <select id="filterTahun" onchange="renderTable()" class="fld !w-auto"><option value="">Semua Tahun Pelajaran</option></select>
+          <label class="flex items-center gap-1.5 text-xs font-semibold text-gray-600 cursor-pointer"><input type="checkbox" id="groupTahun" onchange="renderTable()" class="accent-violet-600"> Kelompokkan per tahun</label>
+          <button onclick="openModalTambah()" class="px-3.5 py-2 bg-lime-500 hover:bg-lime-600 font-bold text-xs rounded-xl">Tambah Data</button>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead><tr class="bg-gray-50 border-b text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+              <th class="py-3.5 px-4">Foto</th><th class="py-3.5 px-4">Siswa</th><th class="py-3.5 px-4">Pencapaian</th><th class="py-3.5 px-4">Lomba</th><th class="py-3.5 px-4">Penyelenggara</th><th class="py-3.5 px-4">Tanggal</th><th class="py-3.5 px-4 text-center">Aksi</th>
+            </tr></thead>
+            <tbody id="tbody" class="divide-y divide-gray-100 text-xs"></tbody>
+          </table>
+        </div>
+        <div id="emptyState" class="hidden py-12 text-center text-sm text-gray-500">Data prestasi tidak ditemukan.</div>
+      </div>
+    </div>
 
-        const themeToggle = document.getElementById('theme-toggle');
-        themeToggle.addEventListener('click', () => {
-            htmlEl.classList.toggle('dark');
-        });
+    <!-- SETTINGS -->
+    <div id="view-settings" class="hidden max-w-2xl">
+      <div class="bg-white rounded-2xl border border-gray-200 p-6 space-y-5">
+        <div><h3 class="text-base font-bold">Pengaturan Koneksi</h3><p class="text-xs text-gray-500">Disimpan di browser ini (localStorage).</p></div>
 
-        const modal = document.getElementById('password-modal');
-        const modalBox = document.getElementById('modal-box');
-        const passInput = document.getElementById('pass');
-        const errorMsg = document.getElementById('error-msg');
-        let pending = '';
+        <div class="space-y-3 p-4 bg-violet-50/60 border border-violet-100 rounded-xl">
+          <p class="text-xs font-bold text-violet-900">Penyimpanan Prestasi (Apps Script)</p>
+          <div><label class="block text-[11px] font-semibold mb-1">URL Web App (/exec)</label><input id="sScriptUrl" class="fld" placeholder="https://script.google.com/macros/s/.../exec"></div>
+          <div><label class="block text-[11px] font-semibold mb-1">Token (sama dengan TOKEN di Code.gs)</label><input id="sToken" class="fld" type="password"></div>
+          <div><label class="block text-[11px] font-semibold mb-1">URL Spreadsheet Data Prestasi (untuk tombol "Buka Sheet")</label><input id="sSheetPrestasi" class="fld"></div>
+        </div>
 
-        document.querySelectorAll('[data-href]').forEach(el => {
-            el.onclick = (e) => {
-                e.preventDefault();
-                pending = el.dataset.href;
-                modal.classList.remove('hidden');
-                passInput.focus();
-            }
-        });
+        <div class="space-y-3">
+          <div><label class="block text-xs font-semibold mb-1">URL / ID Spreadsheet Database Siswa</label><input id="sSheetSiswa" class="fld"><p class="text-[11px] text-gray-400 mt-1">Sheet harus dibagikan "Anyone with the link can view".</p></div>
+          <div><label class="block text-xs font-semibold mb-1">Nama Tab Riwayat Kelas</label><input id="sTabRiwayat" class="fld"></div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-gray-100">
+            <div><label class="block text-[11px] font-semibold mb-1">Kolom NIS (Database Siswa)</label><input id="sKolNisU" class="fld"></div>
+            <div><label class="block text-[11px] font-semibold mb-1">Kolom Nama (Database Siswa)</label><input id="sKolNamaU" class="fld"></div>
+            <div><label class="block text-[11px] font-semibold mb-1">Kolom Tahun (Riwayat Kelas)</label><input id="sKolTahunR" class="fld"></div>
+            <div><label class="block text-[11px] font-semibold mb-1">Kolom NIS (Riwayat Kelas)</label><input id="sKolNisR" class="fld"></div>
+            <div><label class="block text-[11px] font-semibold mb-1">Kolom Kelas (Riwayat Kelas)</label><input id="sKolKelasR" class="fld"></div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-gray-100">
+            <div><label class="block text-xs font-semibold mb-1">Cloudinary Cloud Name</label><input id="sCloudName" class="fld"></div>
+            <div><label class="block text-xs font-semibold mb-1">Cloudinary Upload Preset (Unsigned)</label><input id="sCloudPreset" class="fld"></div>
+          </div>
+        </div>
 
-        const closeModal = () => {
-            modal.classList.add('hidden');
-            passInput.value = '';
-            errorMsg.classList.add('hidden');
-            modalBox.classList.remove('shake');
-        };
+        <div id="statusSiswa" class="p-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium">Status siswa: belum dimuat.</div>
+        <div class="pt-4 border-t border-gray-100 flex gap-3">
+          <button onclick="saveSettings()" class="px-4 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-xs font-semibold">Simpan & Muat Ulang</button>
+          <button onclick="fetchSiswa()" class="px-4 py-2.5 bg-lime-500 hover:bg-lime-600 font-bold rounded-xl text-xs">Sync Data Siswa</button>
+        </div>
+      </div>
+    </div>
+  </main>
 
-        document.getElementById('back-pass').onclick = closeModal;
+  <nav class="md:hidden fixed bottom-0 inset-x-0 z-30 bg-white/95 border-t border-gray-200 px-3 py-2 flex items-center justify-around">
+    <button onclick="switchTab('dashboard')" class="flex flex-col items-center gap-1 text-violet-600"><i data-lucide="layout-dashboard" class="w-5 h-5"></i><span class="text-[10px] font-semibold">Beranda</span></button>
+    <button onclick="switchTab('data')" class="flex flex-col items-center gap-1 text-gray-500"><i data-lucide="award" class="w-5 h-5"></i><span class="text-[10px]">Prestasi</span></button>
+    <button onclick="openModalTambah()" class="w-11 h-11 rounded-full bg-lime-500 flex items-center justify-center -mt-5 shadow-lg border-2 border-white"><i data-lucide="plus" class="w-6 h-6"></i></button>
+    <button onclick="switchTab('settings')" class="flex flex-col items-center gap-1 text-gray-500"><i data-lucide="settings" class="w-5 h-5"></i><span class="text-[10px]">Setelan</span></button>
+  </nav>
+</div>
+</div>
 
-        const verifyPassword = () => {
-            if(passInput.value === 'tuglo') {
-                window.open(pending, '_blank');
-                closeModal();
-            } else {
-                errorMsg.classList.remove('hidden');
-                modalBox.classList.remove('shake');
-                void modalBox.offsetWidth;
-                modalBox.classList.add('shake');
-                passInput.focus();
-            }
-        };
+<!-- MODAL TAMBAH -->
+<div id="modalTambah" class="fixed inset-0 z-50 hidden overflow-y-auto">
+  <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModalTambah()"></div>
+  <div class="flex min-h-full items-center justify-center p-4">
+    <div class="relative bg-white rounded-2xl w-full max-w-xl shadow-xl border border-gray-100 overflow-hidden">
+      <div class="bg-violet-50/70 px-6 py-4 border-b border-violet-100 flex items-center justify-between">
+        <h3 id="modalTitle" class="text-base font-bold">Pencatatan Prestasi Siswa</h3>
+        <button onclick="closeModalTambah()" class="text-gray-400 p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form id="formPrestasi" onsubmit="handleSubmit(event)" class="p-6 space-y-4">
+        <div class="p-3.5 bg-violet-50/60 rounded-xl border border-violet-100 space-y-2 relative">
+          <label class="block text-xs font-bold text-violet-950">NIS / Nama Siswa</label>
+          <input id="inputNISQuery" autocomplete="off" oninput="autocompleteSiswa()" placeholder="Ketik NIS atau nama..." class="w-full px-3.5 py-2.5 bg-white border border-violet-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/20">
+          <div id="nisSuggestions" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-50 max-h-48 overflow-y-auto divide-y divide-gray-100"></div>
+          <input type="hidden" id="selectedNIS"><input type="hidden" id="selectedNama">
+          <div id="siswaBadge" class="hidden items-center justify-between p-2.5 bg-white border border-violet-200 rounded-lg text-xs"></div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold mb-1">Pencapaian</label>
+            <select id="inputPencapaian" onchange="toggleLain(this.value)" required class="fld">
+              <option value="">Pilih Pencapaian</option>
+              <option>Juara 1</option><option>Juara 2</option><option>Juara 3</option>
+              <option>Gold Award</option><option>Silver Award</option><option>Bronze Award</option>
+              <option>Harapan 1</option><option>Harapan 2</option><option>Peserta Terbaik</option>
+              <option value="Lainnya">Lainnya...</option>
+            </select>
+            <input id="inputLain" placeholder="Ketik pencapaian..." class="fld hidden mt-2">
+          </div>
+          <div><label class="block text-xs font-semibold mb-1">Kategori</label><input id="inputKategori" required placeholder="Cth: 25 M Bebas Fins 2 SD putra" class="fld"></div>
+        </div>
+        <div><label class="block text-xs font-semibold mb-1">Nama Lomba / Kejuaraan</label><input id="inputLomba" required class="fld"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div><label class="block text-xs font-semibold mb-1">Penyelenggara</label><input id="inputPenyelenggara" required class="fld"></div>
+          <div><label class="block text-xs font-semibold mb-1">Tanggal</label><input type="date" id="inputTanggal" required onchange="isiOpsiTahun()" class="fld"></div>
+        </div>
+        <div><label class="block text-xs font-semibold mb-1">Tempat / Lokasi</label><input id="inputTempat" required class="fld"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-3.5 bg-violet-50/60 rounded-xl border border-violet-100">
+          <div><label class="block text-xs font-semibold mb-1">Tahun Pelajaran (dari Riwayat Kelas)</label><select id="inputTahun" onchange="updateKelas()" required class="fld"></select></div>
+          <div><label class="block text-xs font-semibold mb-1">Kelas pada tahun tsb (otomatis, bisa diubah)</label><input id="inputKelas" class="fld"></div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">Foto Bukti / Sertifikat (opsional, via Cloudinary)</label>
+          <input type="file" id="fileInput" accept="image/*" class="block w-full text-xs text-gray-600 file:mr-3 file:px-3 file:py-2 file:rounded-lg file:border-0 file:bg-violet-100 file:text-violet-700 file:font-semibold">
+          <p id="fotoNote" class="text-[11px] text-gray-500 mt-1"></p>
+        </div>
+        <div class="pt-3 flex justify-end gap-3 border-t border-gray-100">
+          <button type="button" onclick="closeModalTambah()" class="px-4 py-2.5 bg-white border border-gray-200 font-semibold text-xs rounded-xl">Batal</button>
+          <button id="btnSimpan" type="submit" class="px-5 py-2.5 bg-lime-500 hover:bg-lime-600 font-bold text-xs rounded-xl disabled:opacity-50">Simpan ke Spreadsheet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
-        document.getElementById('submit-pass').onclick = verifyPassword;
+<!-- MODAL DETAIL -->
+<div id="modalDetail" class="fixed inset-0 z-50 hidden overflow-y-auto">
+  <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="$('modalDetail').classList.add('hidden')"></div>
+  <div class="flex min-h-full items-center justify-center p-4">
+    <div id="detailBody" class="relative bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-xl"></div>
+  </div>
+</div>
 
-        passInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                verifyPassword();
-            }
-        });
+<div id="toastHolder" class="fixed bottom-20 md:bottom-6 right-6 z-[60] flex flex-col gap-2"></div>
 
-        passInput.addEventListener('input', () => {
-            errorMsg.classList.add('hidden');
-            modalBox.classList.remove('shake');
-        });
+<style>
+  .fld{width:100%;padding:.6rem .85rem;background:#f9fafb;border:1px solid #e5e7eb;border-radius:.6rem;font-size:.8rem}
+  .fld:focus{outline:none;background:#fff;border-color:#8b5cf6}
+  .navbtn{color:#4b5563;font-weight:500}.navbtn:hover{background:#f5f3ff}
+  .navbtn.active{background:#f5f3ff;color:#6d28d9;font-weight:600}
+</style>
 
-        // Kutipan harian tentang pendidikan & guru (berganti otomatis tiap hari)
-        const dailyQuotes = [
-            "Guru yang biasa-biasa saja memberi tahu. Guru yang baik menjelaskan. Guru yang hebat menginspirasi. — William Arthur Ward",
-            "Mendidik anak-anak agar menjadi cerdas saja tidak cukup, pendidikan harus membuat mereka baik juga. — Theodore Roosevelt",
-            "Pendidikan bukanlah persiapan untuk hidup, pendidikan adalah hidup itu sendiri. — John Dewey",
-            "Anak bukanlah kertas kosong yang bisa ditulisi sekehendak hati kita. — Ki Hajar Dewantara",
-            "Guru adalah orang yang menanam benih hari ini yang akan berbuah di masa depan.",
-            "Tut wuri handayani, di belakang memberi dorongan. — Ki Hajar Dewantara",
-            "Seorang guru akan terus belajar sepanjang hidupnya agar layak menjadi pengajar.",
-            "Ilmu itu lebih baik daripada harta. Ilmu menjaga engkau, sedangkan harta harus engkau jaga. — Ali bin Abi Thalib",
-            "Mengajar dengan hati akan sampai ke hati murid.",
-            "Pendidikan adalah senjata paling ampuh untuk mengubah dunia. — Nelson Mandela",
-            "Guru yang hebat membuat siswa percaya bukan pada gurunya, tetapi pada dirinya sendiri.",
-            "Setiap anak adalah bintang, tugas guru adalah membantu mereka bersinar.",
-            "Kesabaran seorang guru adalah investasi untuk masa depan bangsa.",
-            "Belajar tanpa berpikir itu tidak berguna, tapi berpikir tanpa belajar itu berbahaya. — Konfusius",
-            "Guru adalah pahlawan tanpa tanda jasa yang menuntun anak bangsa menuju cahaya ilmu.",
-            "Sedikit ilmu yang diamalkan lebih baik daripada banyak ilmu yang hanya dihafalkan.",
-            "Anak-anak butuh contoh, bukan kritik. Jadilah guru yang mereka teladani.",
-            "Semangat guru hari ini adalah cahaya harapan murid untuk hari esok.",
-            "Mendidik hati sama pentingnya dengan mendidik pikiran.",
-            "Kelas terbaik adalah tempat di mana rasa ingin tahu lebih dihargai daripada nilai sempurna.",
-            "Guru yang penuh cinta akan menciptakan murid yang penuh percaya diri.",
-            "Ilmu yang bermanfaat adalah warisan terbaik seorang guru bagi muridnya.",
-            "Jadilah guru yang membuat murid rindu untuk terus belajar.",
-            "Setiap hari adalah kesempatan baru untuk menginspirasi satu jiwa lagi.",
-            "Guru hebat bukan yang tahu segalanya, tapi yang mau terus belajar bersama muridnya.",
-            "Kata-kata mengajar, tapi teladan menarik. — Anonim",
-            "Pendidikan yang baik dimulai dari guru yang bahagia menjalani panggilannya.",
-            "Anak yang diberi kasih sayang dalam belajar akan tumbuh menjadi pribadi yang percaya diri.",
-            "Tugas guru bukan mengisi ember, tapi menyalakan api semangat belajar.",
-            "Hari ini kau menabur ilmu, esok engkau menuai generasi yang berilmu dan berakhlak."
-        ];
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-        function tampilkanKutipanHarian() {
-            const el = document.getElementById('daily-quote');
-            if (!el) return;
-            const today = new Date();
-            // Hitung urutan hari sejak awal tahun agar kutipan berganti otomatis setiap hari
-            const startOfYear = new Date(today.getFullYear(), 0, 0);
-            const diff = today - startOfYear;
-            const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const index = dayOfYear % dailyQuotes.length;
-            el.textContent = dailyQuotes[index];
-        }
-        tampilkanKutipanHarian();
+// ---------- SETTINGS ----------
+const DEFAULTS = {
+  scriptUrl: 'ISI_URL_WEB_APP_ANDA_DI_SINI',   // <-- ganti dengan URL .../exec dari Deploy Anda
+  token: 'ISI_TOKEN_RAHASIA_ANDA_DI_SINI',      // <-- ganti dengan TOKEN yang sama persis dengan di Code.gs
+  sheetPrestasi: 'https://docs.google.com/spreadsheets/d/1XBOIT08bXEK8Qo96isQjYFzQZnyG-ZIDjoE2Xv0y3n8/edit',
+  sheetSiswa: 'https://docs.google.com/spreadsheets/d/1HIld6F9AM9LMKdZnWClrH3d8avQ3_4BXoTYZn-22Oqc/edit',
+  tabRiwayat: 'Riwayat_Kelas',
+  kolNisU: 'NIS/NIPD', kolNamaU: 'Nama Lengkap',
+  kolTahunR: 'Tahun Pelajaran', kolNisR: 'NIS', kolKelasR: 'Kelas',
+  cloudName: 'ISI_CLOUDINARY_CLOUD_NAME_ANDA', cloudPreset: 'ISI_CLOUDINARY_UPLOAD_PRESET_ANDA'
+};
+const FIELD_IDS = { scriptUrl:'sScriptUrl', token:'sToken', sheetPrestasi:'sSheetPrestasi', sheetSiswa:'sSheetSiswa', tabRiwayat:'sTabRiwayat', kolNisU:'sKolNisU', kolNamaU:'sKolNamaU', kolTahunR:'sKolTahunR', kolNisR:'sKolNisR', kolKelasR:'sKolKelasR', cloudName:'sCloudName', cloudPreset:'sCloudPreset' };
+let S = { ...DEFAULTS };
+try { S = { ...DEFAULTS, ...JSON.parse(localStorage.getItem('prestunas_settings') || '{}') }; } catch (e) {}
+if (S.tabRiwayat === 'Riwayat Kelas') S.tabRiwayat = 'Riwayat_Kelas';
 
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js');
-        }
-    </script>
+function fillSettingsForm() { Object.entries(FIELD_IDS).forEach(([k, id]) => $(id).value = S[k] || ''); }
+function saveSettings() {
+  Object.entries(FIELD_IDS).forEach(([k, id]) => { S[k] = $(id).value.trim(); });
+  try { localStorage.setItem('prestunas_settings', JSON.stringify(S)); } catch (e) {}
+  toast('Pengaturan disimpan', 'success');
+  fetchSiswa(); loadPrestasi();
+}
+
+// ---------- STATE ----------
+let masterSiswa = [];
+let dataPrestasi = [];
+let fotoUrl = '';
+
+function setSync(state, sub) {
+  const c = { ok:['bg-emerald-500','Database Terhubung'], err:['bg-red-500','Gagal Terhubung'], off:['bg-gray-400','Belum Terhubung'], load:['bg-amber-400','Memuat...'] }[state];
+  $('syncDot').className = 'h-2.5 w-2.5 rounded-full ' + c[0];
+  $('syncTitle').textContent = c[1];
+  $('syncSub').textContent = sub || '';
+}
+
+// ---------- APPS SCRIPT API ----------
+async function apiPost(payload) {
+  if (!S.scriptUrl) throw new Error('URL Apps Script belum diisi di Pengaturan');
+  // text/plain menghindari preflight CORS (tidak didukung Apps Script)
+  const res = await fetch(S.scriptUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ ...payload, token: S.token }) });
+  const json = await res.json();
+  if (!json.ok) throw new Error(json.error || 'Gagal');
+  return json;
+}
+async function loadPrestasi(manual) {
+  if (!S.scriptUrl) { setSync('off', 'Isi URL Apps Script'); renderAll(); return; }
+  setSync('load');
+  try {
+    const res = await fetch(`${S.scriptUrl}?action=list&token=${encodeURIComponent(S.token)}`);
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error);
+    dataPrestasi = json.data.sort((a, b) => Number(b.createdAt || b.id) - Number(a.createdAt || a.id));
+    setSync('ok', `${dataPrestasi.length} data prestasi`);
+    if (manual) toast('Data dimuat ulang dari sheet', 'success');
+  } catch (err) {
+    console.error(err);
+    setSync('err', 'Cek URL / token');
+    toast('Gagal memuat prestasi: ' + err.message, 'error');
+  }
+  renderAll();
+}
+
+// ---------- DATABASE SISWA ----------
+const idxPersis = (cols, judul) => { const t = (judul || '').toLowerCase().trim(); const i = cols.findIndex(c => (c.label || '').toLowerCase().trim() === t); return i === -1 ? null : i; };
+const sheetId = u => { const m = u.match(/\/d\/([a-zA-Z0-9-_]+)/); return m ? m[1] : u; };
+
+async function gviz(id, tab) {
+  const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json${tab ? '&sheet=' + encodeURIComponent(tab) : ''}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Gagal mengakses sheet');
+  const txt = await res.text();
+  const data = JSON.parse(txt.substring(txt.indexOf('{'), txt.lastIndexOf('}') + 1));
+  if (!data.table) throw new Error('Tabel tidak ditemukan');
+  return data.table;
+}
+async function fetchKelasMap(id) {
+  const map = new Map();   // NIS -> [{tahun, kelas}] (terbaru di urutan pertama)
+  try {
+    let t = null;
+    for (const nm of [S.tabRiwayat, S.tabRiwayat.replace(/ /g, '_'), S.tabRiwayat.replace(/_/g, ' ')]) {
+      try { const c = await gviz(id, nm); if (idxPersis(c.cols, S.kolNisR) !== null && idxPersis(c.cols, S.kolKelasR) !== null) { t = c; break; } } catch (e) {}
+    }
+    if (!t) throw new Error('Tab "' + S.tabRiwayat + '" tidak ditemukan / kolom NIS & Kelas tidak cocok');
+    const ni = idxPersis(t.cols, S.kolNisR), ki = idxPersis(t.cols, S.kolKelasR), ti = idxPersis(t.cols, S.kolTahunR);
+    if (ni === null || ki === null) return map;
+    (t.rows || []).forEach(r => {
+      if (!r.c) return;
+      const nis = r.c[ni]?.v != null ? String(r.c[ni].v).trim() : '';
+      const kelas = r.c[ki]?.v != null ? String(r.c[ki].v).trim() : '';
+      const tahun = ti != null && r.c[ti]?.v != null ? String(r.c[ti].v).trim() : '';
+      if (!nis || !kelas) return;
+      const arr = map.get(nis) || [];
+      const ex = arr.find(x => normTahun(x.tahun) === normTahun(tahun));
+      if (ex) ex.kelas = kelas; else arr.push({ tahun, kelas });
+      map.set(nis, arr);
+    });
+    map.forEach(arr => arr.sort((x, y) => normTahun(y.tahun).localeCompare(normTahun(x.tahun))));
+  } catch (e) { console.warn('Riwayat Kelas gagal dimuat', e); }
+  return map;
+}
+async function fetchSiswa() {
+  if (!S.sheetSiswa) return;
+  try {
+    const id = sheetId(S.sheetSiswa);
+    const t = await gviz(id);
+    const ni = idxPersis(t.cols, S.kolNisU) ?? 0, na = idxPersis(t.cols, S.kolNamaU) ?? 1;
+    const kelasMap = await fetchKelasMap(id);
+    const list = []; let skipped = 0;
+    (t.rows || []).forEach(r => {
+      if (!r.c) { skipped++; return; }
+      const nis = r.c[ni]?.v != null ? String(r.c[ni].v).trim() : '';
+      const nama = r.c[na]?.v != null ? String(r.c[na].v).trim() : '';
+      if (!nis || !nama) { skipped++; return; }
+      const riw = kelasMap.get(nis) || [];
+      list.push({ nis, nama, kelas: riw[0]?.kelas || '-', riwayat: riw });
+    });
+    if (list.length) {
+      masterSiswa = list;
+      $('statusSiswa').textContent = `Status siswa: ${list.length} siswa dimuat, ${list.filter(s => s.kelas !== '-').length} dengan kelas${skipped ? `, ${skipped} baris terlewat` : ''}.`;
+      toast(`${list.length} data siswa dimuat`, 'success');
+    }
+  } catch (err) {
+    console.warn(err);
+    $('statusSiswa').textContent = 'Status siswa: gagal memuat (pastikan sheet dibagikan publik).';
+  }
+}
+
+// ---------- TAHUN PELAJARAN ----------
+const normTahun = s => (String(s || '').match(/\d{4}/) || [String(s || '').replace(/\s/g, '')])[0];
+function tahunDariTanggal(t) {   // tahun pelajaran Juli - Juni
+  const m = /^(\d{4})-(\d{2})/.exec(t || ''); if (!m) return '';
+  const y = +m[1], mo = +m[2];
+  return mo >= 7 ? `${y}/${y + 1}` : `${y - 1}/${y}`;
+}
+const tahunItem = d => d.tahunPelajaran || tahunDariTanggal(d.tanggal) || 'Tanpa Tahun';
+const kelasPada = (s, tahun) => (s?.riwayat || []).find(x => normTahun(x.tahun) === normTahun(tahun))?.kelas || '';
+
+function isiOpsiTahun(preferred) {
+  const s = masterSiswa.find(x => x.nis === $('selectedNIS').value);
+  const opts = new Map();
+  (s?.riwayat || []).forEach(r => { if (r.tahun) opts.set(normTahun(r.tahun), r.tahun); });
+  const dari = tahunDariTanggal($('inputTanggal').value);
+  if (dari && !opts.has(normTahun(dari))) opts.set(normTahun(dari), dari);
+  if (preferred && !opts.has(normTahun(preferred))) opts.set(normTahun(preferred), preferred);
+  const list = [...opts.values()].sort().reverse();
+  $('inputTahun').innerHTML = list.length ? list.map(o => `<option>${esc(o)}</option>`).join('') : '<option value="">Pilih siswa / tanggal dulu</option>';
+  const pick = preferred || dari || s?.riwayat?.[0]?.tahun || '';
+  const m = list.find(o => normTahun(o) === normTahun(pick));
+  if (m) $('inputTahun').value = m;
+  updateKelas();
+}
+function updateKelas() {
+  const s = masterSiswa.find(x => x.nis === $('selectedNIS').value);
+  const k = kelasPada(s, $('inputTahun').value);
+  $('inputKelas').value = k;
+  $('inputKelas').placeholder = !s ? 'Pilih siswa dulu' : !(s.riwayat || []).length ? 'Siswa ini tidak ada di Riwayat Kelas, isi manual' : k ? '' : 'Tahun ini belum ada di Riwayat Kelas, isi manual';
+}
+
+// ---------- AUTOCOMPLETE ----------
+function autocompleteSiswa() {
+  const q = $('inputNISQuery').value.toLowerCase().trim();
+  const box = $('nisSuggestions');
+  $('selectedNIS').value = ''; $('selectedNama').value = '';
+  if (!q) { box.classList.add('hidden'); return; }
+  const m = masterSiswa.filter(s => s.nis.toLowerCase().includes(q) || s.nama.toLowerCase().includes(q)).slice(0, 30);
+  box.innerHTML = m.length ? m.map(s => `
+    <div data-nis="${esc(s.nis)}" class="sug p-2.5 hover:bg-violet-50 cursor-pointer flex justify-between items-center text-xs">
+      <div><p class="font-bold">${esc(s.nama)}</p><p class="text-[10px] text-gray-400">NIS: ${esc(s.nis)}</p></div>
+      <span class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px]">${esc(s.kelas)}</span>
+    </div>`).join('') : '<div class="p-3 text-xs text-gray-400">Siswa tidak ditemukan</div>';
+  box.classList.remove('hidden');
+}
+$('nisSuggestions').addEventListener('click', e => {
+  const el = e.target.closest('.sug'); if (!el) return;
+  const s = masterSiswa.find(x => x.nis === el.dataset.nis); if (!s) return;
+  $('selectedNIS').value = s.nis; $('selectedNama').value = s.nama;
+  $('inputNISQuery').value = `${s.nama} (${s.nis})`;
+  const b = $('siswaBadge');
+  b.innerHTML = `<div><span class="font-bold">${esc(s.nama)}</span><span class="text-gray-500 ml-2">NIS: ${esc(s.nis)}</span></div><span class="px-2 py-0.5 bg-violet-100 text-violet-700 font-semibold rounded-full text-[10px]">Kelas ${esc(s.kelas)}</span>`;
+  b.classList.remove('hidden'); b.classList.add('flex');
+  $('nisSuggestions').classList.add('hidden');
+  isiOpsiTahun();
+});
+function toggleLain(v) {
+  const f = $('inputLain');
+  f.classList.toggle('hidden', v !== 'Lainnya');
+  f.required = v === 'Lainnya';
+  if (v !== 'Lainnya') f.value = '';
+}
+
+// ---------- CLOUDINARY ----------
+async function uploadCloudinary(file) {
+  if (!S.cloudName || !S.cloudPreset) throw new Error('Cloudinary belum diisi di Pengaturan');
+  const fd = new FormData(); fd.append('file', file); fd.append('upload_preset', S.cloudPreset);
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${S.cloudName}/image/upload`, { method: 'POST', body: fd });
+  if (!res.ok) throw new Error('Upload Cloudinary gagal');
+  return (await res.json()).secure_url;
+}
+const thumb = (u, p = 'w_120,h_120,c_fill,q_auto,f_auto') => u && u.includes('res.cloudinary.com') ? u.replace('/upload/', `/upload/${p}/`) : u;
+const fallbackImg = n => `https://placehold.co/80x80/8b5cf6/ffffff?text=${encodeURIComponent((n || 'SW').substring(0, 2).toUpperCase())}`;
+const imgTag = (item, cls) => `<img src="${esc(thumb(item.foto) || fallbackImg(item.namaSiswa))}" onerror="this.onerror=null;this.src='${fallbackImg(item.namaSiswa)}'" class="${cls}" alt="">`;
+
+// ---------- SUBMIT ----------
+async function handleSubmit(e) {
+  e.preventDefault();
+  const nis = $('selectedNIS').value, nama = $('selectedNama').value;
+  if (!nis || !nama) return toast('Pilih siswa dari daftar saran terlebih dahulu', 'error');
+
+  let pencapaian = $('inputPencapaian').value;
+  if (pencapaian === 'Lainnya') pencapaian = $('inputLain').value.trim();
+
+  const btn = $('btnSimpan'); btn.disabled = true; btn.textContent = 'Menyimpan...';
+  try {
+    const file = $('fileInput').files[0];
+    const old = editingId ? dataPrestasi.find(d => d.id === editingId) : null;
+    fotoUrl = file ? await uploadCloudinary(file) : (old ? old.foto : '');
+
+    const now = Date.now();
+    const item = {
+      id: old ? old.id : String(now), nis, namaSiswa: nama, pencapaian,
+      kategori: $('inputKategori').value.trim(), namaLomba: $('inputLomba').value.trim(),
+      penyelenggara: $('inputPenyelenggara').value.trim(), tanggal: $('inputTanggal').value,
+      tempat: $('inputTempat').value.trim(), foto: fotoUrl, createdAt: old ? old.createdAt : String(now),
+      tahunPelajaran: $('inputTahun').value, kelas: $('inputKelas').value === '-' ? '' : $('inputKelas').value
+    };
+    await apiPost({ action: old ? 'update' : 'add', item });   // tulis ke sheet DULU
+
+    if (old) dataPrestasi[dataPrestasi.indexOf(old)] = item; else dataPrestasi.unshift(item);
+    renderAll(); closeModalTambah();
+    toast(old ? 'Perubahan tersimpan ke spreadsheet' : 'Prestasi tersimpan ke spreadsheet', 'success');
+    editingId = null; resetForm();
+  } catch (err) {
+    console.error(err);
+    toast('Gagal menyimpan: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = editingId ? 'Simpan Perubahan' : 'Simpan ke Spreadsheet';
+  }
+}
+
+async function deletePrestasi(id) {
+  if (!confirm('Hapus data prestasi ini dari spreadsheet?')) return;
+  try {
+    await apiPost({ action: 'delete', id });
+    dataPrestasi = dataPrestasi.filter(d => d.id !== id);
+    renderAll(); toast('Data dihapus', 'success');
+  } catch (err) { toast('Gagal menghapus: ' + err.message, 'error'); }
+}
+
+// ---------- RENDER ----------
+function renderAll() { renderTahunFilter(); renderDashboard(); renderTable(); }
+
+function renderDashboard() {
+  $('mTotal').textContent = dataPrestasi.length;
+  $('mSiswa').textContent = new Set(dataPrestasi.map(d => d.nis)).size;
+  $('mLomba').textContent = new Set(dataPrestasi.map(d => (d.namaLomba || '').toLowerCase().trim())).size;
+  const ym = new Date().toISOString().slice(0, 7);
+  $('mBulan').textContent = dataPrestasi.filter(d => (d.tanggal || '').startsWith(ym)).length;
+  $('recentList').innerHTML = dataPrestasi.length ? dataPrestasi.slice(0, 6).map(it => `
+    <div onclick="openDetail('${esc(it.id)}')" class="p-3.5 bg-gray-50 hover:bg-violet-50/50 rounded-xl border border-gray-100 flex items-start gap-3 cursor-pointer">
+      ${imgTag(it, 'w-10 h-10 rounded-xl object-cover border border-violet-200 flex-shrink-0')}
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center justify-between gap-1"><p class="text-xs font-bold truncate">${esc(it.namaSiswa)}</p><span class="px-2 py-0.5 bg-lime-100 text-lime-800 text-[10px] font-bold rounded-full whitespace-nowrap">${esc(it.pencapaian)}</span></div>
+        <p class="text-[11px] text-gray-600 font-medium truncate mt-0.5">${esc(it.namaLomba)}</p>
+        <p class="text-[10px] text-gray-400 mt-1 truncate">${esc(it.kategori)} • ${esc(it.nis)}</p>
+      </div>
+    </div>`).join('') : '<p class="text-xs text-gray-400 col-span-full">Belum ada data prestasi.</p>';
+}
+
+const daftarTahun = () => [...new Set(dataPrestasi.map(tahunItem))].sort().reverse();
+function renderTahunFilter() {
+  const sel = $('filterTahun'), cur = sel.value, list = daftarTahun();
+  sel.innerHTML = '<option value="">Semua Tahun Pelajaran</option>' + list.map(t => `<option>${esc(t)}</option>`).join('');
+  sel.value = list.includes(cur) ? cur : '';
+  $('tahunChips').innerHTML = list.map(t => `<button data-tahun="${esc(t)}" class="chip px-3 py-1.5 bg-violet-50 hover:bg-violet-100 text-violet-800 rounded-full text-xs font-semibold">${esc(t)} <span class="ml-1 px-1.5 py-0.5 bg-white rounded-full text-[10px]">${dataPrestasi.filter(d => tahunItem(d) === t).length}</span></button>`).join('') || '<p class="text-xs text-gray-400">Belum ada data.</p>';
+}
+$('tahunChips').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if (!b) return;
+  switchTab('data'); $('filterTahun').value = b.dataset.tahun; renderTable();
+});
+
+function rowHtml(it) {
+  return `
+    <tr class="hover:bg-gray-50">
+      <td class="py-3 px-4">${imgTag(it, 'w-10 h-10 object-cover rounded-lg border border-gray-200')}</td>
+      <td class="py-3 px-4"><p class="font-bold">${esc(it.namaSiswa)}</p><p class="text-[10px] text-violet-700 font-mono">${esc(it.nis)}</p><p class="text-[10px] text-gray-500">${it.kelas ? 'Kelas ' + esc(it.kelas) + ' • ' : ''}${esc(tahunItem(it))}</p></td>
+      <td class="py-3 px-4"><span class="px-2.5 py-1 bg-lime-100 text-lime-800 font-bold text-[11px] rounded-full">${esc(it.pencapaian)}</span></td>
+      <td class="py-3 px-4"><p class="font-medium">${esc(it.namaLomba)}</p><p class="text-[10px] text-gray-500">${esc(it.kategori)}</p></td>
+      <td class="py-3 px-4 text-gray-600">${esc(it.penyelenggara)}</td>
+      <td class="py-3 px-4 text-gray-500"><p>${esc(it.tanggal)}</p><p class="text-[10px] text-gray-400">${esc(it.tempat)}</p></td>
+      <td class="py-3 px-4 text-center whitespace-nowrap">
+        <button onclick="openDetail('${esc(it.id)}')" class="p-1.5 text-gray-400 hover:text-violet-600"><i data-lucide="eye" class="w-4 h-4"></i></button>
+        <button onclick="openEdit('${esc(it.id)}')" title="Edit" class="p-1.5 text-gray-400 hover:text-amber-600"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+        <button onclick="deletePrestasi('${esc(it.id)}')" class="p-1.5 text-gray-400 hover:text-red-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+      </td>
+    </tr>`;
+}
+
+function renderTable() {
+  const q = ($('filterSearch').value || '').toLowerCase(), th = $('filterTahun').value, grup = $('groupTahun').checked;
+  const items = dataPrestasi.filter(d => (!th || tahunItem(d) === th) &&
+    [d.namaSiswa, d.nis, d.namaLomba, d.kategori, d.pencapaian].some(v => (v || '').toLowerCase().includes(q)));
+  if (grup) items.sort((a, b) => tahunItem(b).localeCompare(tahunItem(a)) || Number(b.createdAt || b.id) - Number(a.createdAt || a.id));
+  $('emptyState').classList.toggle('hidden', items.length > 0);
+  let last = null, html = '';
+  items.forEach(it => {
+    if (grup && tahunItem(it) !== last) {
+      last = tahunItem(it);
+      html += `<tr class="bg-violet-50"><td colspan="7" class="py-2 px-4 text-xs font-bold text-violet-800">Tahun Pelajaran ${esc(last)} <span class="font-medium text-violet-600">(${items.filter(x => tahunItem(x) === last).length} prestasi)</span></td></tr>`;
+    }
+    html += rowHtml(it);
+  });
+  $('tbody').innerHTML = html;
+  if (window.lucide) lucide.createIcons();
+}
+
+function openDetail(id) {
+  const it = dataPrestasi.find(d => d.id === id); if (!it) return;
+  $('detailBody').innerHTML = `
+    <div class="flex justify-between items-start border-b border-gray-100 pb-3">
+      <div><span class="px-2.5 py-1 bg-lime-100 text-lime-800 font-bold text-xs rounded-full inline-block mb-1">${esc(it.pencapaian)}</span><h3 class="font-bold text-base leading-tight">${esc(it.namaLomba)}</h3></div>
+      <button onclick="$('modalDetail').classList.add('hidden')" class="text-gray-400 p-1 text-lg leading-none">&times;</button>
+    </div>
+    <div class="p-3 bg-gray-50 rounded-xl text-xs"><p class="font-bold text-sm">${esc(it.namaSiswa)}</p><p class="text-gray-500">NIS: ${esc(it.nis)}</p></div>
+    <div class="grid grid-cols-2 gap-3 text-xs">
+      <div><span class="text-gray-400 block text-[10px]">KATEGORI</span><b>${esc(it.kategori)}</b></div>
+      <div><span class="text-gray-400 block text-[10px]">PENYELENGGARA</span><b>${esc(it.penyelenggara)}</b></div>
+      <div><span class="text-gray-400 block text-[10px]">TANGGAL</span><b>${esc(it.tanggal)}</b></div>
+      <div><span class="text-gray-400 block text-[10px]">TEMPAT</span><b>${esc(it.tempat)}</b></div>
+      <div><span class="text-gray-400 block text-[10px]">TAHUN PELAJARAN</span><b>${esc(tahunItem(it))}</b></div>
+      <div><span class="text-gray-400 block text-[10px]">KELAS</span><b>${esc(it.kelas || '-')}</b></div>
+    </div>
+    ${it.foto ? `<img src="${esc(thumb(it.foto, 'w_800,q_auto,f_auto'))}" class="w-full max-h-72 object-contain rounded-xl border border-gray-200 bg-gray-50" alt="Bukti">` : ''}`;
+  $('modalDetail').classList.remove('hidden');
+}
+
+// ---------- UI ----------
+const TITLES = {
+  dashboard: ['Dashboard', 'Ringkasan pencapaian siswa'],
+  data: ['Data Prestasi Siswa', 'Tabel lengkap dari Google Sheets'],
+  settings: ['Pengaturan', 'Koneksi Apps Script, Database Siswa, dan Cloudinary']
+};
+function switchTab(tab) {
+  ['dashboard', 'data', 'settings'].forEach(t => $('view-' + t).classList.toggle('hidden', t !== tab));
+  document.querySelectorAll('.navbtn').forEach(b => b.classList.toggle('active', b.dataset.nav === tab));
+  $('pageTitle').textContent = TITLES[tab][0]; $('pageSub').textContent = TITLES[tab][1];
+}
+function bukaSheet() {
+  if (!S.sheetPrestasi) { toast('Isi URL Spreadsheet Data Prestasi di Pengaturan', 'warning'); switchTab('settings'); return; }
+  window.open(`https://docs.google.com/spreadsheets/d/${sheetId(S.sheetPrestasi)}/edit`, '_blank', 'noopener');
+}
+let editingId = null;
+function resetForm() {
+  $('formPrestasi').reset(); toggleLain('');
+  $('selectedNIS').value = ''; $('selectedNama').value = '';
+  $('siswaBadge').classList.add('hidden'); $('siswaBadge').classList.remove('flex');
+  $('fotoNote').textContent = '';
+  $('inputTahun').innerHTML = ''; $('inputKelas').value = '';
+  $('modalTitle').textContent = editingId ? 'Edit Prestasi Siswa' : 'Pencatatan Prestasi Siswa';
+  $('btnSimpan').textContent = editingId ? 'Simpan Perubahan' : 'Simpan ke Spreadsheet';
+}
+function openModalTambah() { editingId = null; resetForm(); $('modalTambah').classList.remove('hidden'); }
+function openEdit(id) {
+  const it = dataPrestasi.find(d => d.id === id); if (!it) return;
+  editingId = id; resetForm();
+  $('selectedNIS').value = it.nis; $('selectedNama').value = it.namaSiswa;
+  $('inputNISQuery').value = `${it.namaSiswa} (${it.nis})`;
+  const kelas = masterSiswa.find(s => s.nis === it.nis)?.kelas || '-';
+  const b = $('siswaBadge');
+  b.innerHTML = `<div><span class="font-bold">${esc(it.namaSiswa)}</span><span class="text-gray-500 ml-2">NIS: ${esc(it.nis)}</span></div><span class="px-2 py-0.5 bg-violet-100 text-violet-700 font-semibold rounded-full text-[10px]">Kelas ${esc(kelas)}</span>`;
+  b.classList.remove('hidden'); b.classList.add('flex');
+  const sel = $('inputPencapaian');
+  const known = [...sel.options].some(o => o.value === it.pencapaian && o.value !== 'Lainnya');
+  sel.value = known ? it.pencapaian : 'Lainnya'; toggleLain(sel.value);
+  if (!known) $('inputLain').value = it.pencapaian;
+  $('inputKategori').value = it.kategori; $('inputLomba').value = it.namaLomba;
+  $('inputPenyelenggara').value = it.penyelenggara; $('inputTanggal').value = it.tanggal;
+  $('inputTempat').value = it.tempat;
+  isiOpsiTahun(it.tahunPelajaran || '');
+  if (it.kelas) $('inputKelas').value = it.kelas;
+  $('fotoNote').textContent = it.foto ? 'Foto saat ini dipertahankan. Pilih file baru untuk menggantinya.' : '';
+  $('modalTambah').classList.remove('hidden');
+}
+function closeModalTambah() { $('modalTambah').classList.add('hidden'); }
+
+function toast(msg, type = 'success') {
+  const c = { success: 'bg-lime-500/20 text-lime-400', error: 'bg-red-500/20 text-red-400', warning: 'bg-amber-500/20 text-amber-400' }[type] || '';
+  const sym = { success: '✓', error: '!', warning: '!' }[type] || '✓';
+  const t = document.createElement('div');
+  t.className = 'p-4 rounded-xl shadow-xl text-xs font-semibold flex items-center gap-3 bg-gray-900 text-white max-w-xs';
+  t.innerHTML = `<span class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${c}">${sym}</span><span>${esc(msg)}</span>`;
+  $('toastHolder').appendChild(t);
+  setTimeout(() => t.remove(), type === 'error' ? 5000 : 3000);
+}
+
+window.onload = () => {
+  fillSettingsForm();
+  switchTab('dashboard');
+  if (window.lucide) lucide.createIcons();
+  fetchSiswa();
+  loadPrestasi();
+  if (!S.scriptUrl) toast('Isi URL Apps Script di Pengaturan agar data bisa tersimpan', 'warning');
+};
+</script>
 </body>
 </html>
